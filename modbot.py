@@ -51,6 +51,7 @@ def post_image(bucket, key):
     
 def approve(ack, client, body):
     ack()
+    key = body['message']['blocks'][1]['elements'][0]['value']
     url = body['message']['blocks'][0]['image_url']
     print(f"Approving {key}")
     blocks = [
