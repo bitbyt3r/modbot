@@ -48,20 +48,12 @@ def post_image(bucket, key):
         blocks=blocks
     )
     
-@app.action("approve")
+    
 def approve(ack, client, body):
     ack()
     key = body['message']['blocks'][1]['elements'][0]['value']
     url = body['message']['blocks'][0]['image_url']
     print(f"Approving {key}")
-    copy_source = {
-        'Bucket': 'giffinator-uncensored',
-        'Key': key
-    }
-    print(f"About to copy {key}", copy_source)
-    s3 = boto3.resource('s3')
-    s3.meta.client.copy(copy_source, 'giffinator-approved', key)
-    print(f"Finished copying {key}")
     blocks = [
         {
             "type": "image",
@@ -78,6 +70,18 @@ def approve(ack, client, body):
     ]
     client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Approved by {body['user']['name']}")
     print(f"Replied for {key}")
+
+def copy_image(key):
+    copy_source = {
+        'Bucket': 'giffinator-uncensored',
+        'Key': key
+    }
+    print(f"About to copy {key}", copy_source)
+    s3 = boto3.resource('s3')
+    s3.meta.client.copy(copy_source, 'giffinator-approved', key)
+    print(f"Finished copying {key}")
+
+app.action(ack=approve, lazy=[copy_image])
 
 @app.action("reject")
 def reject(ack, client, body):
