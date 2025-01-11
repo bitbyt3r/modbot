@@ -2,6 +2,7 @@ name: deploy to lambda
 on: [push]
 jobs:
   deploy:
+    environment: Deploy
     name: deploy lambda function
     runs-on: ubuntu-latest
     steps:
