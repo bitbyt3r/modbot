@@ -59,6 +59,7 @@ def approve(ack, client, body):
         'Bucket': 'giffinator-uncensored',
         'Key': key
     }
+    print(f"About to copy {key}", copy_source)
     s3.meta.client.copy(copy_source, 'giffinator-approved', key)
     print(f"Finished copying {key}")
     blocks = [
