@@ -6,7 +6,7 @@ import boto3
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
-app = App()
+app = App(process_before_response=True)
 
 def post_image(bucket, key):
     url = f"https://{bucket}.s3.us-east-1.amazonaws.com/{key}"
@@ -59,12 +59,8 @@ def approve(ack, client, body):
         'Key': key
     }
     print(f"About to copy {key}", copy_source)
-    try:
-        s3 = boto3.resource('s3')
-        s3.meta.client.copy(copy_source, 'giffinator-approved', key)
-    except:
-        traceback.print_exc()
-        print("Failed to copy!")
+    s3 = boto3.resource('s3')
+    s3.meta.client.copy(copy_source, 'giffinator-approved', key)
     print(f"Finished copying {key}")
     blocks = [
         {
