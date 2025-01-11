@@ -1,5 +1,6 @@
 import json
 import requests
+import traceback
 import boto3
 
 from slack_bolt import App
@@ -58,8 +59,12 @@ def approve(ack, client, body):
         'Key': key
     }
     print(f"About to copy {key}", copy_source)
-    s3 = boto3.resource('s3')
-    s3.meta.client.copy(copy_source, 'giffinator-approved', key)
+    try:
+        s3 = boto3.resource('s3')
+        s3.meta.client.copy(copy_source, 'giffinator-approved', key)
+    except:
+        traceback.print_exc()
+        print("Failed to copy!")
     print(f"Finished copying {key}")
     blocks = [
         {
