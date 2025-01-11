@@ -25,5 +25,4 @@ jobs:
           memory_size: 128
           timeout: 10
           handler: modbot.main
-          role: arn:aws:iam::782544206188:role/service-role/giffinator_moderator-role-nps7i6os
           runtime: python3.13
