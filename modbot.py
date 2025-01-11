@@ -68,7 +68,7 @@ def approve(ack, client, body):
             }
         }
     ]
-    client.chat_update(channel=body['channel'], ts=body['ts'], blocks=blocks, text="Approved image")
+    client.chat_update(channel=body['event']['channel'], ts=body['event']['ts'], blocks=blocks, text="Approved image")
 
 @app.action("reject")
 def reject(ack, client, body):
@@ -90,7 +90,7 @@ def reject(ack, client, body):
             }
         }
     ]
-    client.chat_update(channel=body['channel'], ts=body['ts'], blocks=blocks, text="Rejected image")
+    client.chat_update(channel=body['event']['channel'], ts=body['event']['ts'], blocks=blocks, text="Rejected image")
 
 def main(event, context):
     if "Records" in event:
