@@ -10,8 +10,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Build venv
         run: |
-          pip install --target . -r requirements.txt
-          zip -r lambda.zip venv modbot.py
+          mkdir package
+          pip install --target package -r requirements.txt
+          mv modbot.py package/
+          cd package
+          zip -r ../lambda.zip .
       - name: Deploy lambda
         uses: appleboy/lambda-action@v0.2.0
         with:
