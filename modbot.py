@@ -51,7 +51,6 @@ def post_image(bucket, key):
     
 def approve(ack, client, body):
     ack()
-    key = body['message']['blocks'][1]['elements'][0]['value']
     url = body['message']['blocks'][0]['image_url']
     print(f"Approving {key}")
     blocks = [
@@ -71,7 +70,8 @@ def approve(ack, client, body):
     client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Approved by {body['user']['name']}")
     print(f"Replied for {key}")
 
-def copy_image(key):
+def copy_image(body):
+    key = body['message']['blocks'][1]['elements'][0]['value']
     copy_source = {
         'Bucket': 'giffinator-uncensored',
         'Key': key
