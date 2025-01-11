@@ -58,7 +58,7 @@ def approve(ack, client, body):
         {
             "type": "image",
             "image_url": url,
-            "alt_text": "Approved image"
+            "alt_text": f"Approved by {body['user']['name']}"
         },
         {
             "type": "section",
@@ -68,7 +68,7 @@ def approve(ack, client, body):
             }
         }
     ]
-    client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text="Approved image")
+    client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Approved by {body['user']['name']}")
 
 @app.action("reject")
 def reject(ack, client, body):
@@ -80,7 +80,7 @@ def reject(ack, client, body):
         {
             "type": "image",
             "image_url": url,
-            "alt_text": "Rejected image"
+            "alt_text": f"Rejected by {body['user']['name']}"
         },
         {
             "type": "section",
@@ -90,7 +90,7 @@ def reject(ack, client, body):
             }
         }
     ]
-    client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text="Rejected image")
+    client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Rejected by {body['user']['name']}")
 
 def main(event, context):
     if "Records" in event:
