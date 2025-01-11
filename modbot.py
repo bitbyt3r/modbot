@@ -60,6 +60,7 @@ def approve(ack, client, body):
         'Key': key
     }
     s3.meta.client.copy(copy_source, 'giffinator-approved', key)
+    print(f"Finished copying {key}")
     blocks = [
         {
             "type": "image",
@@ -75,6 +76,7 @@ def approve(ack, client, body):
         }
     ]
     client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Approved by {body['user']['name']}")
+    print(f"Replied for {key}")
 
 @app.action("reject")
 def reject(ack, client, body):
@@ -97,6 +99,7 @@ def reject(ack, client, body):
         }
     ]
     client.chat_update(channel=body['channel']['id'], ts=body['message']['ts'], blocks=blocks, text=f"Rejected by {body['user']['name']}")
+    print(f"Replied for {key}")
 
 def main(event, context):
     if "Records" in event:
