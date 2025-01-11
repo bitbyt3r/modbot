@@ -1,0 +1,28 @@
+name: deploy to lambda
+on: [push]
+jobs:
+  deploy:
+    name: deploy lambda function
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+      - name: Build venv
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          zip -r lambda.zip venv modbot.py
+      - name: Deploy lambda
+        uses: appleboy/lambda-action@v0.2.0
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: giffinator_moderator
+          zip_file: lambda.zip
+          memory_size: 128
+          timeout: 10
+          handler: modbot.main
+          role: arn:aws:iam::782544206188:role/service-role/giffinator_moderator-role-nps7i6os
+          runtime: python3.13
