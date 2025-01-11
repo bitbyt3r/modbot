@@ -81,7 +81,7 @@ def copy_image(body):
     s3.meta.client.copy(copy_source, 'giffinator-approved', key)
     print(f"Finished copying {key}")
 
-app.action(ack=approve, lazy=[copy_image])
+app.action()(ack=approve, lazy=[copy_image])
 
 @app.action("reject")
 def reject(ack, client, body):
