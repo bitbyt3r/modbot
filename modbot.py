@@ -53,6 +53,7 @@ def approve(ack, client, body):
     key = body['message']['blocks'][1]['elements'][0]['value']
     url = body['message']['blocks'][0]['image_url']
     print(f"Approving {key}")
+    print(body)
     blocks = [
         {
             "type": "image",
