@@ -2,8 +2,6 @@ import json
 import requests
 import boto3
 
-s3 = boto3.resource('s3')
-
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
@@ -60,6 +58,7 @@ def approve(ack, client, body):
         'Key': key
     }
     print(f"About to copy {key}", copy_source)
+    s3 = boto3.resource('s3')
     s3.meta.client.copy(copy_source, 'giffinator-approved', key)
     print(f"Finished copying {key}")
     blocks = [
