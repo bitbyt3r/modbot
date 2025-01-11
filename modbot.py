@@ -99,7 +99,7 @@ def reject(ack, client, body):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"Approved by {body['user']['name']}"
+                "text": f"Rejected by {body['user']['name']}"
             }
         }
     ]
