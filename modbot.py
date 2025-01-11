@@ -42,7 +42,8 @@ def post_image(bucket, key):
         }
     ]
     app.client.chat_postMessage(
-        channel="$super-jumbobot",
+        channel="#super-jumbobot",
+        text="Image to moderate",
         blocks=blocks
     )
     
