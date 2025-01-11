@@ -2,6 +2,8 @@ import json
 import requests
 import boto3
 
+s3 = boto3.resource('s3')
+
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
@@ -53,7 +55,11 @@ def approve(ack, client, body):
     key = body['message']['blocks'][1]['elements'][0]['value']
     url = body['message']['blocks'][0]['image_url']
     print(f"Approving {key}")
-    print(body)
+    copy_source = {
+        'Bucket': 'giffinator-uncensored',
+        'Key': key
+    }
+    s3.meta.client.copy(copy_source, 'giffinator-approved', key)
     blocks = [
         {
             "type": "image",
@@ -64,7 +70,7 @@ def approve(ack, client, body):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Approved"
+                "text": f"Approved by {body['user']['name']}"
             }
         }
     ]
@@ -86,7 +92,7 @@ def reject(ack, client, body):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Rejected"
+                "text": f"Approved by {body['user']['name']}"
             }
         }
     ]
